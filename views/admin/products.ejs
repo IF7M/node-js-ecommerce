@@ -1,0 +1,51 @@
+<%- include('./partials/adminheader') %>
+<main>
+<div class="container mt-2">
+    <h2 class="page-title">المنتجات</h2>
+    <a href="/admin/products/add-product" class="btn btn-primary mt-2">اضف منتج</a>
+    </div>
+    
+        <div class="container mt-2">
+            <% if(count > 0){ %>
+    <table class="table table-striped">
+        <thead>
+        <tr class="home">
+            <th>الصورة</th>
+            <th>المنتج</th>
+            <th>السعر</th>
+            <th>الكمية</th>
+            <th>التصنيف</th>
+            <th>تعديل</th>
+            <th>حذف</th>
+        </tr>
+        </thead>
+        <tbody>
+           <% products.forEach((product)=>{ %>
+               <tr>
+                <td>
+                    <% if(product.img == ''){ %>
+                        <img src="/imgs/noimg.png" alt="no_img">
+                   <% } else{ %>
+                     <img src="/products_imgs/<%= product._id %>/<%= product.img %>" alt="no_img">
+                  <% } %>
+                    
+                </td>
+                <td><%= product.name %></td>
+                <td><%= parseFloat(product.price).toFixed(2) %></td>
+                <td><%= product.quantity %></td>
+                <td><%= product.category %></td>
+                <td><a href="/admin/products/edit-product/<%= product._id %>">تعديل</a></td>
+                <td><a class="confirmDeletion" href="/admin/products/delete-product/<%= product._id %>">حذف</a></td>
+               </tr>
+           <% }) %>
+        </tbody>
+    </table>
+    <% } else{ %>
+        <h3 class="text-center">لايوجد منتجات, يرجى اضافة منتج!</h3>
+     <% } %>
+</div>
+   
+</main>  
+
+
+<%- include('./partials/adminfooter') %>

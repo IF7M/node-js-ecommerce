@@ -1,0 +1,31 @@
+<%- include('./partials/adminheader') %>
+<main>
+<div class="container mt-2">
+    <h2 class="page-title">الصفحات</h2>
+    <a href="/admin/pages/add-page" class="btn btn-primary mt-2">اضف صفحة</a>
+    </div>
+
+    <table class="table table-striped container mt-2">
+        <thead>
+        <tr class="home">
+            <th>العنوان</th>
+            <th>تعديل</th>
+            <th>حذف</th>
+        </tr>
+        </thead>
+        <tbody>
+           <% pages.forEach((page)=>{ %>
+               <tr>
+                <td><%= page.title %></td>
+                <td><a href="/admin/pages/edit-page/<%= page._id %>">تعديل</a></td>
+                <td><a class="confirmDeletion" href="/admin/pages/delete-page/<%= page._id %>">حذف</a></td>
+               </tr>
+           <% }) %>
+        </tbody>
+    </table>
+    
+</main>
+   
+
+
+<%- include('./partials/adminfooter') %>

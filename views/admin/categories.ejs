@@ -1,0 +1,32 @@
+<%- include('./partials/adminheader') %>
+<main>
+<div class="container mt-2">
+    <h2 class="page-title">التصنيفات</h2>
+    <a href="/admin/categories/add-category" class="btn btn-primary mt-2">اضف تصنيف</a>
+    </div>
+<div class="container">
+    <table class="table table-striped">
+        <thead>
+        <tr class="home">
+            <th>التصنيف</th>
+            <th>تعديل</th>
+            <th>حذف</th>
+        </tr>
+        </thead>
+        <tbody>
+           <% categories.forEach((cate)=>{ %>
+               <tr>
+                <td><%= cate.title %></td>
+                <td><a href="/admin/categories/edit-category/<%= cate._id %>">تعديل</a></td>
+                <td><a class="confirmDeletion" href="/admin/categories/delete-category/<%= cate._id %>">حذف</a></td>
+          
+               </tr>
+           <% }) %>
+        </tbody>
+    </table>
+</div>
+</main>
+   
+
+
+<%- include('./partials/adminfooter') %>
