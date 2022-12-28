@@ -5,7 +5,6 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const fileUpload = require('express-fileupload');
-
 const PORT = process.env.PORT;
 const DBLINK = process.env.DBLINK;
 
@@ -25,10 +24,11 @@ app.set('view engine', 'ejs'); // ejs
 
 
 // app use
+
+
 /// static files
 app.use(express.static('public'));
-// file upload middleware
-app.use(fileUpload());
+
 /// body parser middleware
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
@@ -36,8 +36,7 @@ app.use(bodyParser.json());
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: true,
-    saveUninitialized: true,
-    // cookie: { secure: true }
+    saveUninitialized: true
   }));
 
 //set routes

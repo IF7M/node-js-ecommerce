@@ -23,8 +23,11 @@ const ProductSchema =  mongoose.Schema({
         type: Number
        
     },
-    img:{
+    thumbImg:{
         type: String
+    },
+    gallery:{
+        type: Array
     },
     category:{
         type: String

@@ -3,21 +3,53 @@ const router = express.Router();
 const mkdirp = require('mkdirp');
 const fs = require('fs-extra');
 const resizeImg = require('resize-img');
+const multer  = require('multer')
+const path = require('path')
+
 const Product = require('../models/product');
 const Category = require('../models/category')
 
+// set dirname
+router.use(express.static(__dirname));
+router.use(express.static('public'));
+// multer config
+const storage = multer.diskStorage({
+    destination:  (req, file, cb)=> {
+    
+      cb(null, path.join(__dirname,"../public/products_imgs/"));
+     
+    },
+    filename:  (req, file, cb)=> {
+        let imgName = req.body.name;
+        let newImgName = imgName.replace(/\s+/g,'-').toLowerCase();
+        let randomAddOn = file.originalname.at(0)+ Math.floor(Math.random()*5);
+        console.log(file)
+        const imgFinalName = newImgName + '-' +  Date.now() + randomAddOn + '.' + file.mimetype.split('/')[1];
+       
+        cb(null, imgFinalName)
+        
+    }
+  })
+  
 
+  const upload = multer({ storage: storage })
+ 
+
+
+  //upload api test
+  router.post('/upload',upload.any(), (req, res)=>{
+
+    console.log( req.files[0].filename)
+    res.send('uploaded');
+
+  })
 
 router.get('/', (req,res)=>{
-let count;
-Product.count((err, c)=>{
-    count = c;
-})
 
 Product.find((err, products)=>{
     res.render('admin/products',{
         products: products,
-        count: count
+       
     });
 });
 })
@@ -46,96 +78,183 @@ Category.find((err, categories)=>{
    
 })
 
-router.post('/add-category',(req,res)=>{
 
-    let title = req.body.title;
+
+router.post('/add-product', upload.any(), (req,res)=>{
+
+    let name = req.body.name;
+    let sdesc = req.body.sdesc;
+    let desc = req.body.desc;
+    let price = req.body.price;
+    let sprice = req.body.sprice;
+    let quantity = req.body.quantity;
     let slug = req.body.slug.replace(/\s+/g,'-').toLowerCase();
-    if(slug == '') slug = title.replace(/\s+/g,'-').toLowerCase();
+    if(slug == '') slug = name.replace(/\s+/g,'-').toLowerCase();
+    let thumbImg;
+    req.files.length > 0 ? thumbImg = req.files[0].filename : thumbImg = ''
+    let gallery = [];
+    req.files.forEach(img=>{
+       gallery.push(img.filename)
+    });
+   
+    let category = req.body.category;
+
     
+
     
-    Category.findOne({slug: slug}, (err, category)=>{
-        if(!err){
-            if(category){
-                console.log('category is already exists!')
-            } else{
-                let categoryToAdd = new Category({
-                    title: title,
-                    slug: slug
+
+    Product.findOne({slug:slug},(err, product)=>{
+        if(product){
+            console.log('product is already exists!')
+            Category.find((err, categories)=>{
+                res.render('admin/add-product', {
+                name: name,
+                slug: slug,
+                sdesc: sdesc,
+                desc: desc,
+                categories: categories,
+                price: price,
+                sprice: sprice,
+                quantity: quantity
+            })})
+            
+        }else {
+
+                        let priceFloat = parseFloat(price).toFixed(2);
+                        let spriceFloat = parseFloat(sprice).toFixed(2);
+                        let theProduct = new Product({
+                            name: name,
+                            slug: slug,
+                            sdesc: sdesc,
+                            desc: desc,
+                            category: category,
+                            price: priceFloat,
+                            sprice: spriceFloat,
+                            quantity: quantity,
+                            thumbImg: thumbImg,
+                            gallery: gallery
+                        })
+    
+                        theProduct.save(async (err)=>{
+                            if(err){
+                                console.log(err)
+                            } else {
+                                res.redirect('/admin/products');
+                            }
+                                
+                           
+                        })
+
+                        
+    
+                    }
                 })
 
-                categoryToAdd.save(err => {
-                    err?console.log(err):res.redirect('/admin/categories')
-                });
-            }
-        }else{
-            console.log(err)
-        }
-    
+     
 
-    })
 })
 
 
 router
-.get('/edit-category/:id',(req,res)=>{
-    Category.findById(req.params.id, (err, category)=>{
-    if(err){
-        console.log(err)
-    }else{
-        res.render('admin/edit-category', {
-            title:category.title,
-            slug:category.slug,
-            id:category._id
-        })
+.get('/edit-product/:id',(req,res)=>{
 
-    }
- })
+    Category.find((err, categories)=>{
+        Product.findById(req.params.id, (err, p)=>{
+            if(err){
+                console.log(err)
+                res.redirect('/admin/products')
+            } else {
+
+                let gallery = p.gallery;
+                
+                    if(!err){
+                        res.render('admin/edit-product', {
+                            name: p.name,
+                            slug: p.slug,
+                            sdesc: p.sdesc,
+                            desc: p.desc,
+                            categories: categories,
+                            category: p.category.replace(/\s+/g, '-').toLowerCase(),
+                            price: p.price,
+                            sprice: p.sprice,
+                            quantity: p.quantity,
+                            thumbImg: p.thumbImg,
+                            gallery: p.gallery
+                        })
+                    }
+                
+
+                
+
+            }
+        })
+     
+    })
 
     
 })
-.post('/edit-category/:id',(req,res)=>{
 
-    let title = req.body.title;
+.post('/edit-product/:id', upload.any(), (req,res)=>{
+        
+    let name = req.body.name;
+    let sdesc = req.body.sdesc;
+    let desc = req.body.desc;
+    let price = req.body.price;
+    let sprice = req.body.sprice;
+    let quantity = req.body.quantity;
     let slug = req.body.slug.replace(/\s+/g,'-').toLowerCase();
-    if(slug == '') slug = title.replace(/\s+/g,'-').toLowerCase();
+    if(slug == '') slug = name.replace(/\s+/g,'-').toLowerCase();
+    let thumbImg;
+    req.files.length > 0 ? thumbImg = req.files[0].filename : thumbImg = ''
+    let gallery = [];
+    req.files.forEach(img=>{
+       gallery.push(img.filename)
+    });
+    let category = req.body.category;
     let id = req.params.id;
 
-    Category.findOne({slug: slug, _id:{'$ne':id}}, (err, category)=>{
+    Product.findOne({slug:slug, _id:{'$ne':id}}, (err, p)=>{
         if(!err){
-            if(category){
-                console.log('category slug is used!')
-                res.render('admin/edit-category', {
-                    title: title,
-                    slug: slug,
-                    id:id
-                });
+
+            if(p){
+                console.log('product slug exists!')
+                res.redirect('/admin/products/edit-product/'+ id)
             } else{
-                Category.findById(id, (err, category)=>{
-                    if(!err){
-                        category.title = title;
-                        category.slug = slug;
-                       
-                        category.save(err => {
-                        err?console.log(err):res.redirect('/admin/categories/edit-category/'+ id)
-                    });
+                Product.findById(id, (err, p)=>{
+                    if(err){
+                        console.log(err)
+                    } else {
+                        p.name = name
+                        p.slug = slug
+                        p.sdesc = sdesc
+                        p.desc = desc
+                        p.category = category
+                        p.price = parseFloat(price).toFixed(2)
+                        p.sprice = parseFloat(sprice).toFixed(2)
+                        p.quantity = quantity
+                        if(gallery.length > 0){
+                            p.thumbImg = thumbImg
+                            p.gallery = gallery
+                        }
+                        
                     }
                 })
             }
-        }else{
-            console.log(err)
+            
+
         }
-    
-
     })
-       
-   })
 
-router.get('/delete-category/:id', (req, res)=>{
+    
+})
+   
 
-    Category.findByIdAndRemove(req.params.id, (err)=>{
+router.get('/delete-product/:id', (req, res)=>{
+
+    Product.findByIdAndRemove(req.params.id, (err)=>{
         if(err) return console.log(err);
 
-        res.redirect('/admin/categories')
+        res.redirect('/admin/products')
 
     })
 
