@@ -23,8 +23,8 @@ const storage = multer.diskStorage({
         let imgName = req.body.name;
         let newImgName = imgName.replace(/\s+/g,'-').toLowerCase();
         let randomAddOn = file.originalname.at(0)+ Math.floor(Math.random()*5);
-        console.log(file)
-        const imgFinalName = newImgName + '-' +  Date.now() + randomAddOn + '.' + file.mimetype.split('/')[1];
+        
+        const imgFinalName = newImgName + '-' + randomAddOn + Date.now() + '.' + file.mimetype.split('/')[1];
        
         cb(null, imgFinalName)
         
@@ -32,12 +32,12 @@ const storage = multer.diskStorage({
   })
   
 
-  const upload = multer({ storage: storage })
+  const upload = multer({ storage: storage }).any()
  
 
 
   //upload api test
-  router.post('/upload',upload.any(), (req, res)=>{
+  router.post('/upload',upload, (req, res)=>{
 
     console.log( req.files[0].filename)
     res.send('uploaded');
@@ -80,7 +80,7 @@ Category.find((err, categories)=>{
 
 
 
-router.post('/add-product', upload.any(), (req,res)=>{
+router.post('/add-product', upload, (req,res)=>{
 
     let name = req.body.name;
     let sdesc = req.body.sdesc;
@@ -179,7 +179,8 @@ router
                             sprice: p.sprice,
                             quantity: p.quantity,
                             thumbImg: p.thumbImg,
-                            gallery: p.gallery
+                            gallery: p.gallery,
+                            id: p._id
                         })
                     }
                 
@@ -194,7 +195,7 @@ router
     
 })
 
-.post('/edit-product/:id', upload.any(), (req,res)=>{
+.post('/edit-product/:id', upload, (req,res)=>{
         
     let name = req.body.name;
     let sdesc = req.body.sdesc;
@@ -236,6 +237,10 @@ router
                             p.thumbImg = thumbImg
                             p.gallery = gallery
                         }
+
+                        p.save(err => {
+                            err?console.log(err):res.redirect('/admin/products/edit-product/'+ id)
+                        });
                         
                     }
                 })
