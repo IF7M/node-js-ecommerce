@@ -45,16 +45,18 @@ const admin = require('./routes/admin_main');
 const adminPages = require('./routes/admin_pages');
 const adminCategories = require('./routes/admin_categories');
 const adminProducts = require('./routes/admin_products');
+const adminAds = require('./routes/admin_ads');
 
 //// admin routes
 app.use('/admin', admin);
 app.use('/admin/pages', adminPages);
 app.use('/admin/categories', adminCategories);
 app.use('/admin/products', adminProducts);
+app.use('/admin/ads', adminAds);
 //// shop routes
 
 app.use('/', pages);
-app.use('/login', pages);
+
 
 
 

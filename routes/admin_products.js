@@ -255,12 +255,33 @@ router
    
 
 router.get('/delete-product/:id', (req, res)=>{
+    let pImg;
+    let pgallary;
+    Product.findByIdAndRemove(req.params.id, async (err,p)=>{
+        if(err){
+            console.log(err);
+        }else{
+            pImg = p.thumbImg
+            pgallary = p.gallery
+            
+        }
 
-    Product.findByIdAndRemove(req.params.id, (err)=>{
-        if(err) return console.log(err);
-
+        if(pImg !== ''){
+            fs.remove(`public/products_imgs/${pImg}`,(err)=>{
+                if(err) return console.log(err);
+            })
+        }
+        
+        if(pgallary.length>1){
+            pgallary.forEach(img=>{
+                fs.remove(`public/products_imgs/${img}`, (err)=>{
+                    if(err) return console.log(err);
+                })
+            })
+        }
+        
         res.redirect('/admin/products')
-
+        
     })
 
 })

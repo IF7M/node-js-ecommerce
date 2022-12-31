@@ -1,0 +1,57 @@
+<%- include('./partials/adminheader') %>
+<main>
+<div class="container mt-2">
+<h2 class="page-title">اضافة اعلان</h2>
+<a href="/admin/ads" class="btn btn-primary mt-2">الرجوع الى الاعلانات</a>
+</div>
+
+<div class="container">
+ <form action="/admin/ads/add-ad" method="post" enctype="multipart/form-data">
+<div class="form-group col-lg-6 col-md-6 col-sm-12">
+    <label for="">العنوان</label>
+    <input type="text" class="form-control" name="title" value="<%= title %>" placeholder="Title">
+</div>
+<div class="form-group col-lg-6 col-md-6 col-sm-12">
+    <label for="">عند الضغط توجية الى؟</label>
+    <input type="text" class="form-control" name="linkto" value="<%= linkto %>" placeholder="رابط">
+</div>
+
+<div class="form-group col-lg-6 col-md-6 col-sm-12">
+    <label for="">صورة الاعلان</label>
+    <input type="file" class="form-control" name="ad" id="pimg" multiple onchange="readURL(this)">
+    <img src="/imgs/noimg.png" id="adImgPreview">
+</div>
+
+<div class="form-group mt-2">
+<button class="btn btn-primary" >اضافة</button>
+</div>
+ </form>
+
+
+</div>
+</main>
+
+<script>
+
+    function readURL(input){
+        if(input.files && input.files[0]){
+           
+
+                let reader = new FileReader();
+
+            reader.onload = function(e){
+                document.querySelector('#adImgPreview').setAttribute('src', e.target.result);
+            }
+
+            reader.readAsDataURL(input.files[0]);
+           
+            
+        }
+    };
+
+  
+</script>
+
+
+
+<%- include('./partials/adminfooter') %>

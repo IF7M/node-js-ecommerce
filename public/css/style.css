@@ -15,6 +15,7 @@ footer {
 
 main{
     flex: 1;
+    
 }
 
 
@@ -25,6 +26,12 @@ main{
 #pimgPreview{
     margin: 20px;
     width: 100px;
+}
+
+#adImgPreview{
+    margin: 20px;
+    width: 150px;
+    aspect-ratio: 16 / 9;
 }
 
 .previmg{

@@ -1,0 +1,46 @@
+<%- include('./partials/adminheader') %>
+<main>
+    <div class="container">
+
+<div class="container mt-2">
+    
+    <h2 class="page-title">الاعلانات</h2>
+    <a href="/admin/ads/add-ad" class="btn btn-primary mt-2">اضف اعلان</a>
+    </div>
+    <% if(ads.length >  0){ %>
+    <table class="table table-striped container mt-2">
+        <thead>
+        <tr class="home">
+            <th>الصورة</th>
+            <th>العنوان</th>
+            <th>تعديل</th>
+            <th>حذف</th>
+        </tr>
+        </thead>
+        <tbody>
+           <% ads.forEach((ad)=>{ %>
+            
+               <tr>
+                <td>
+                    <% if(ad.ad !== ''){ %>
+                        <img class="previmg" src="/ads_imgs/<%= ad.ad %>" alt="no_img">
+                            
+                       <% } else{ %>
+                        <img class="previmg" src="/imgs/noimg.png" >
+                      <% } %>
+                <td><%= ad.title %></td>
+                <td><a href="/admin/ads/edit-ad/<%= ad._id %>">تعديل</a></td>
+                <td><a class="confirmDeletion" href="/admin/ads/delete-ad/<%= ad._id %>">حذف</a></td>
+               </tr>
+           <% }) %>
+        </tbody>
+    </table>
+    <% } else{ %>
+        <h3 class="text-center mt-2">لايوجد اعلانات, يرجى اضافة اعلان!</h3>
+     <% } %>
+</div>
+</main>
+   
+
+
+<%- include('./partials/adminfooter') %>
