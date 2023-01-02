@@ -5,7 +5,7 @@
     <a href="/admin/pages/add-page" class="btn btn-primary mt-2">اضف صفحة</a>
     </div>
 
-    <table class="table table-striped container mt-2">
+    <table class="table table-striped container mt-2 sorting">
         <thead>
         <tr class="home">
             <th>العنوان</th>
@@ -15,7 +15,7 @@
         </thead>
         <tbody>
            <% pages.forEach((page)=>{ %>
-               <tr>
+               <tr id="id_<%= page._id%>" class="<%= page.slug%>">
                 <td><%= page.title %></td>
                 <td><a href="/admin/pages/edit-page/<%= page._id %>">تعديل</a></td>
                 <td><a class="confirmDeletion" href="/admin/pages/delete-page/<%= page._id %>">حذف</a></td>
@@ -25,7 +25,19 @@
     </table>
     
 </main>
-   
+   <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+   <script>
+    $('tbody').sortable({
+        items: "tr:not('.home')",
+        placeholder: "ui-state-hightlight",
+        update: function(){
+            let ids =  $('tbody').sortable("serialize");
+            let url = "/admin/pages/reorder-pages";
+
+            $.post(url, ids);
+        }
+    })
+   </script>
 
 
 <%- include('./partials/adminfooter') %>

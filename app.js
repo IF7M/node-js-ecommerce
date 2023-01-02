@@ -4,7 +4,6 @@ const ejs = require('ejs');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const session = require('express-session');
-const fileUpload = require('express-fileupload');
 const PORT = process.env.PORT;
 const DBLINK = process.env.DBLINK;
 
@@ -28,6 +27,18 @@ app.set('view engine', 'ejs'); // ejs
 
 /// static files
 app.use(express.static('public'));
+
+// page model 
+const Page = require('./models/page')
+
+// get pages 
+Page.find({}).sort({sorting: 1}).exec((err,pages)=>{
+    if(err){
+        
+    } else{
+        app.locals.pages = pages
+    }
+})
 
 /// body parser middleware
 app.use(bodyParser.urlencoded({extended:false}));
