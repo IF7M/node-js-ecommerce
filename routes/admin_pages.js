@@ -42,10 +42,11 @@ const sortPages = (ids, callback)=>{
 
 router.post('/reorder-pages', async (req, res) => {
     let ids = req.body['id[]'];
+
     sortPages(ids, ()=>{
         Page.find({}).sort({sorting: 1}).exec((err,pages)=>{
             if(err){
-                
+                console.log(err)
             } else{
                 req.app.locals.pages = pages
             }
@@ -69,7 +70,7 @@ router.post('/add-page', (req, res) => {
     if (slug == '') slug = title.replace(/\s+/g, '-').toLowerCase();
     let content = req.body.content;
 
-    Page.findOne({ slug: slug }, (err, page) => {
+    Page.findOne({slug: slug}, (err, page) => {
         if (!err) {
             if (page) {
                 console.log('page is already exists!')
@@ -83,6 +84,13 @@ router.post('/add-page', (req, res) => {
 
                 pageToAdd.save(err => {
                     err ? console.log(err) : res.redirect('/admin/pages')
+                    Page.find({}).sort({sorting: 1}).exec((err,pages)=>{
+                        if(err){
+                            console.log(err)
+                        } else{
+                            req.app.locals.pages = pages
+                        }
+                    })
                 });
             }
         } else {
@@ -141,6 +149,13 @@ router
 
                             page.save(err => {
                                 err ? console.log(err) : res.redirect('/admin/pages/edit-page/' + id)
+                                Page.find({}).sort({sorting: 1}).exec((err,pages)=>{
+                                    if(err){
+                                        console.log(err)
+                                    } else{
+                                        req.app.locals.pages = pages
+                                    }
+                                })
                             });
                         }
                     })
@@ -157,7 +172,16 @@ router
 router.get('/delete-page/:id', (req, res) => {
 
     Page.findByIdAndRemove(req.params.id, (err) => {
-        if (err) return console.log(err);
+        if (err) 
+            return console.log(err);
+            
+        Page.find({}).sort({sorting: 1}).exec((err,pages)=>{
+                if(err){
+                    console.log(err)
+                } else{
+                    req.app.locals.pages = pages
+                }
+            })
 
         res.redirect('/admin/pages')
 

@@ -34,11 +34,24 @@ const Page = require('./models/page')
 // get pages 
 Page.find({}).sort({sorting: 1}).exec((err,pages)=>{
     if(err){
-        
+        console.log(err);
     } else{
-        app.locals.pages = pages
+       app.locals.pages = pages
+       
     }
-})
+});
+
+// category model 
+const Category = require('./models/category')
+
+// get categories 
+Category.find((err,categories)=>{
+    if(err){
+        console.log(err);
+    } else{
+       app.locals.categories = categories
+    }
+});
 
 /// body parser middleware
 app.use(bodyParser.urlencoded({extended:false}));
@@ -52,6 +65,7 @@ app.use(session({
 
 //set routes
 const pages = require('./routes/pages');
+const products = require('./routes/products');
 const admin = require('./routes/admin_main');
 const adminPages = require('./routes/admin_pages');
 const adminCategories = require('./routes/admin_categories');
@@ -64,10 +78,10 @@ app.use('/admin/pages', adminPages);
 app.use('/admin/categories', adminCategories);
 app.use('/admin/products', adminProducts);
 app.use('/admin/ads', adminAds);
+
 //// shop routes
-
 app.use('/', pages);
-
+app.use('/products', products);
 
 
 

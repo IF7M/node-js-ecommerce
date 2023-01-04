@@ -5,7 +5,7 @@
     <a href="/admin/categories/add-category" class="btn btn-primary mt-2">اضف تصنيف</a>
     </div>
 <div class="container">
-    <table class="table table-striped">
+    <table class="table table-striped sorting">
         <thead>
         <tr class="home">
             <th>التصنيف</th>
@@ -15,7 +15,7 @@
         </thead>
         <tbody>
            <% categories.forEach((cate)=>{ %>
-               <tr>
+               <tr  id="id_<%= cate._id%>" class="<%= cate.slug%>">
                 <td><%= cate.title %></td>
                 <td><a href="/admin/categories/edit-category/<%= cate._id %>">تعديل</a></td>
                 <td><a class="confirmDeletion" href="/admin/categories/delete-category/<%= cate._id %>">حذف</a></td>
@@ -26,7 +26,19 @@
     </table>
 </div>
 </main>
-   
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+<script>
+ $('tbody').sortable({
+     items: "tr:not('.home')",
+     placeholder: "ui-state-hightlight",
+     update: function(){
+         let ids =  $('tbody').sortable("serialize");
+         let url = "/admin/categories/reorder-category";
+
+         $.post(url, ids);
+     }
+ })
+</script>
 
 
 <%- include('./partials/adminfooter') %>
