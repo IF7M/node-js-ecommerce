@@ -91,7 +91,7 @@ router.post('/add-category',(req,res)=>{
 
                 categoryToAdd.save(err => {
                     err?console.log(err):res.redirect('/admin/categories')
-                    req.app.locals.categories = category
+                    req.app.locals.categories = categoryToAdd
                 });
             }
         }else{
@@ -167,7 +167,7 @@ router.get('/delete-category/:id', (req, res)=>{
             if(err){
                 console.log(err);
             } else{
-               app.locals.categories = categories
+               req.app.locals.categories = categories
             }
         });
 

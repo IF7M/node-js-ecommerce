@@ -4,6 +4,7 @@ const Ads = require('../models/ads');
 const Product = require('../models/product');
 const Page = require('../models/page');
 
+
 router.get('/', (req, res) => {
 
     Ads.find((err, ads) => {
@@ -23,26 +24,26 @@ router.get('/', (req, res) => {
 
 
 
-// // all pages
-// router.get('/:slug', (req, res) => {
+// all pages
+router.get('/:slug', (req, res) => {
 
-//     let slug = req.params.slug;
+    let slug = req.params.slug;
     
-//     Page.findOne({slug:slug},(err, page) => {
-//         if (!err) {
+    Page.findOne({slug:slug},(err, page) => {
+        if (!err) {
             
-//             res.render('pages/index-page', {
-//                 title: page.title,
-//                 content: page.content
-//             });
-//         } else {
-//             console.log(err);
-//             res.render('pages/404');
-//         }
+            res.render('pages/index-page', {
+                title: page.title,
+                content: page.content
+            });
+        } else {
+            console.log(err);
+            res.render('pages/404');
+        }
 
-//     })
+    })
 
-// });
+});
 
 
 

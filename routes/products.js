@@ -45,20 +45,25 @@ router.get('/:category', (req, res) => {
   let categorySlug = req.params.category;
 
   Category.findOne({slug:categorySlug},(err, cat)=>{
-   
-        Product.find({category:categorySlug },(err, Product) => {
-            if (!err) {
-                res.render('pages/cat_products', {
-                    title: cat.title,
-                    Product: Product
-                })
-                console.log(product)
-            } else {
-                console.log(err);
-                res.render('pages/404');
-            }
-    
-        })
+   if(cat){
+    Product.find({category:categorySlug },(err, Product) => {
+        if (!err) {
+            res.render('pages/cat_products', {
+                ctitle: cat.title,
+                Product: Product
+            })
+        
+        } else {
+            console.log(err);
+            res.render('pages/404');
+        }
+
+    })
+   } else {
+    console.log(err);
+    res.render('pages/404');
+}
+        
 
    
   })
