@@ -31,8 +31,8 @@ router.post('/add/:product', (req, res) => {
                     // let newItem = true;
 
                     for(let i = 0 ; i < cart.length; i++){
-                        if(cart[i].id === id){
-                            cart.qty = +1;
+                        if(cart[i].id == id){
+                            cart[i].qty = cart[i].qty + 1;
                             newItem = false;
                             break;
                         }else{
