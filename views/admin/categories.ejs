@@ -16,7 +16,7 @@
         <tbody>
            <% categories.forEach((cate)=>{ %>
                <tr  id="id_<%= cate._id%>" class="<%= cate.slug%>">
-                <td><%= cate.title %></td>
+                <td><%= cate.cname %></td>
                 <td><a href="/admin/categories/edit-category/<%= cate._id %>">تعديل</a></td>
                 <td><a class="confirmDeletion" href="/admin/categories/delete-category/<%= cate._id %>">حذف</a></td>
           

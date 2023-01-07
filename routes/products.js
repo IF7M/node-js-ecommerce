@@ -2,7 +2,10 @@ const express = require('express');
 const router = express.Router();
 const Product = require('../models/product');
 const Category = require('../models/category');
-const product = require('../models/product');
+
+/// static files
+router.use(express.static(__dirname));
+router.use(express.static('public'));
 
 router.get('/', (req, res) => {
 
@@ -18,26 +21,7 @@ router.get('/', (req, res) => {
 
 
 
-// Product page
-// router.get('/:Product', (req, res) => {
 
-//     let Product = req.params.Product;
-    
-//     Page.findOne({slug:slug},(err, page) => {
-//         if (!err) {
-            
-//             res.render('pages/index-page', {
-//                 title: page.title,
-//                 content: page.content
-//             });
-//         } else {
-//             console.log(err);
-//             res.render('pages/404');
-//         }
-
-//     })
-
-// });
 
 // category products 
 router.get('/:category', (req, res) => {
@@ -49,7 +33,7 @@ router.get('/:category', (req, res) => {
     Product.find({category:categorySlug },(err, Product) => {
         if (!err) {
             res.render('pages/cat_products', {
-                ctitle: cat.title,
+                cat: cat,
                 Product: Product
             })
         
@@ -73,14 +57,39 @@ router.get('/:category', (req, res) => {
 });
 
 
+// category products 
+router.get('/:category/:product', (req, res) => {
+
+      Product.findOne({slug:req.params.product}, (err, p) => {
+          if (!p) {
+              console.log(err);
+              res.render('pages/404');
+          
+          } else {
+           console.log(p)
+           res.render('pages/s_product', {
+                pname: p.name,
+                pslug: p.slug,
+                psdesc: p.sdesc,
+                pdesc: p.desc,
+                pcategory: p.category,
+                pprice: p.price,
+                psprice: p.sprice,
+                pquantity: p.quantity,
+                pthumbImg: p.thumbImg,
+                pgallery: p.gallery,
+                pid: p._id
+            })
+
+          }
+  
+      })
+ 
+
+    });
 
 
 
-router.get('/login', (req, res) => {
-
-
-    res.render('pages/login')
-})
 
 
 //Exports

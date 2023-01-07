@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 //category schema 
 
 const CategorySchema = mongoose.Schema({
-    title:{
+    cname:{
         type: String,
         required: true
     },

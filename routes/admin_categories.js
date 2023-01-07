@@ -65,15 +65,15 @@ router.post('/reorder-Category', async (req, res) => {
 
 
 router.get('/add-category',(req,res)=>{
-    let title = '';
+    let cname = '';
     let slug = '';
 
-    res.render('admin/add-category', {title:title,slug:slug})
+    res.render('admin/add-category', {cname:cname,slug:slug})
 })
 
 router.post('/add-category',(req,res)=>{
 
-    let title = req.body.title;
+    let cname = req.body.cname;
     let slug = req.body.slug.replace(/\s+/g,'-').toLowerCase();
     if(slug == '') slug = title.replace(/\s+/g,'-').toLowerCase();
     
@@ -84,7 +84,7 @@ router.post('/add-category',(req,res)=>{
                 console.log('category is already exists!')
             } else{
                 let categoryToAdd = new Category({
-                    title: title,
+                    cname: cname,
                     slug: slug,
                     sorting: 100
                 })
@@ -110,7 +110,7 @@ router
         console.log(err)
     }else{
         res.render('admin/edit-category', {
-            title:category.title,
+            cname:category.cname,
             slug:category.slug,
             id:category._id
         })
@@ -122,7 +122,7 @@ router
 })
 .post('/edit-category/:id',(req,res)=>{
 
-    let title = req.body.title;
+    let cname = req.body.cname;
     let slug = req.body.slug.replace(/\s+/g,'-').toLowerCase();
     if(slug == '') slug = title.replace(/\s+/g,'-').toLowerCase();
     let id = req.params.id;
@@ -132,14 +132,14 @@ router
             if(category){
                 console.log('category slug is used!')
                 res.render('admin/edit-category', {
-                    title: title,
+                    cname: cname,
                     slug: slug,
                     id:id
                 });
             } else{
                 Category.findById(id, (err, category)=>{
                     if(!err){
-                        category.title = title;
+                        category.cname = cname;
                         category.slug = slug;
                        
                         category.save(err => {

@@ -34,7 +34,7 @@
     <label for=""> التصنيف</label>
     <select class="form-select"  name="category">
         <% categories.forEach((category)=>{ %>
-            <option value="<%= category.slug %>"><%= category.title %></option>
+            <option value="<%= category.slug %>"><%= category.cname %></option>
         <% }); %>
     </select>
 </div>

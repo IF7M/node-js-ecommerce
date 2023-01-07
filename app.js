@@ -26,6 +26,8 @@ app.set('view engine', 'ejs'); // ejs
 
 
 /// static files
+/// static files
+app.use(express.static(__dirname));
 app.use(express.static('public'));
 
 // page model 
@@ -63,8 +65,16 @@ app.use(session({
     saveUninitialized: true
   }));
 
+// cart 
+app.get('*', (req,res,next)=>{
+    res.locals.cart = req.session.cart;
+    next();
+});
+
+
 //set routes
 const pages = require('./routes/pages');
+const cart = require('./routes/cart');
 const products = require('./routes/products');
 const admin = require('./routes/admin_main');
 const adminPages = require('./routes/admin_pages');
@@ -82,6 +92,7 @@ app.use('/admin/ads', adminAds);
 //// shop routes
 app.use('/', pages);
 app.use('/products', products);
+app.use('/cart', cart);
 
 
 
