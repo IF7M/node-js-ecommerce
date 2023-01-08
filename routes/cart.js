@@ -9,11 +9,11 @@ const Category = require('../models/category');
 
 // get add to cart
 
-router.post('/add/:product', (req, res) => {
+router.get('/add/:product', (req, res) => {
 
-   let id = req.params.product;
+   let slug = req.params.product;
 
-        Product.findById(id,(err, p) => {
+        Product.findOne({slug:slug},(err, p) => {
             if (err) {
                 console.log(err)
             }else{
@@ -24,24 +24,29 @@ router.post('/add/:product', (req, res) => {
                         qty: 1,
                         price: p.sprice? parseFloat(p.sprice).toFixed(2):parseFloat(p.price).toFixed(2),
                         thumbImg:p.thumbImg,
-                        id:id
+                        id:p.id,
+                        slug:slug,
+                        subtotal:p.sprice?p.sprice:p.price
                     })
                 } else{
                     let cart = req.session.cart;
-                    // let newItem = true;
-
+                    let newItem = true;
                     for(let i = 0 ; i < cart.length; i++){
-                        if(cart[i].id == id){
-                            cart[i].qty = cart[i].qty + 1;
+                        if(cart[i].slug == slug){
+                            cart[i].qty++;
+                            cart[i].subtotal = cart[i].price * cart[i].qty;
                             newItem = false;
                             break;
-                        }else{
+                        }
+                        if(newItem){
                             cart.push({
                                 name:p.name,
                                 qty: 1,
                                 price: p.sprice? parseFloat(p.sprice).toFixed(2):parseFloat(p.price).toFixed(2),
                                 thumbImg:p.thumbImg,
-                                id:id
+                                id:p.id,
+                                slug:slug,
+                                subtotal:p.sprice?p.sprice:p.price
                             })
                         }
                     }
@@ -53,6 +58,29 @@ router.post('/add/:product', (req, res) => {
         })
     
 });
+
+
+router.get('/checkout', (req,res)=>{
+    let cartTotal = 0;
+if(req.session.cart){
+    
+    if(req.session.cart.length>1){
+        req.session.cart.forEach(p =>{
+            cartTotal = cartTotal + p.subtotal;
+         });
+    }else{
+        cartTotal = req.session.cart[0].subtotal;
+    }
+   
+}
+
+
+res.render('pages/checkout',{
+    cart: req.session.cart,
+    cartTotal:cartTotal
+})
+
+})
 
 
 //Exports
