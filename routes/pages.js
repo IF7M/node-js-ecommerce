@@ -41,14 +41,17 @@ router.get('/products', (req, res) => {
 });
 
 
-
+// favicon fix 
+router.get('/favicon.ico', (req,res)=>{
+    return ''
+   })
 
 
 // all pages
 router.get('/:slug', (req, res) => {
 
     let slug = req.params.slug;
-    console.log(typeof(slug))
+    
     Page.findOne({slug:slug}, (err, page) => {
         
         if (err) {
@@ -57,7 +60,7 @@ router.get('/:slug', (req, res) => {
 
         } else {
             res.render('pages/index-page', {
-                page1:page
+                page:page
 
             });
         }
