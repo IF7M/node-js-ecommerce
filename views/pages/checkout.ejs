@@ -1,5 +1,7 @@
 
 <%- include('partials/header') %>
+
+
 <main>
  <% if(typeof cart !== "undefined"){%>
 <div class="container">
@@ -7,7 +9,7 @@
     <div class="py-5 text-center">
       <h1>إتمام الشراء</h1>
       </div>
-  <form class="needs-validation" novalidate="">
+  <form id="checkout-form" action="/cart/create-order" method="post">
     <div class="row g-3">
       <div class="col-md-5 col-lg-4 order-md-last">
         <h4 class="d-flex justify-content-between align-items-center mb-3">
@@ -45,10 +47,12 @@
             
           <%})%>
           
+         
           
           <li class="list-group-item d-flex justify-content-between">
             <span>مجموع (ريال)</span>
             <strong><%=parseFloat(cartTotal).toFixed(2)%> ر.س </strong>
+            <input type="hidden"  id="cartTotal" name="cartTotal" value="<%=cartTotal%>"></input>
           </li>
         </ul>
 
@@ -56,22 +60,9 @@
         <hr class="my-4">
 
         <h4 class="mb-3">طريقة الدفع</h4>
-
-        <div class="my-3">
-          <div class="form-check">
-            <input id="credit" name="paymentMethod" type="radio" class="form-check-input" checked="" required="">
-            <label class="form-check-label" for="credit">بطاقة ائتمان</label>
-          </div>
-          <div class="form-check">
-            <input id="cash" name="paymentMethod" type="radio" class="form-check-input" required="">
-            <label class="form-check-label" for="cash">نقد</label>
-          </div>
-        </div>
-
-
-        <hr class="my-4">
-
-        <button class="w-50 btn btn-primary btn-lg text-center" type="submit">الاستمرار بالدفع</button>
+   
+        <input type="image" class="paypal-btn paypal-btn-no-padding" src="/public/imgs/paypal-btn-ar.png" alt="submit button">
+       
 
       </div>
       <div class="col-md-7 col-lg-8">
@@ -80,7 +71,7 @@
           <div class="row g-3">
             <div class="col-sm-6">
               <label for="firstName" class="form-label">الاسم الأول</label>
-              <input type="text" class="form-control" id="firstName" placeholder="" value="" required="">
+              <input type="text" class="form-control" name="firstName" id="firstName" placeholder="" value="" required="">
               <div class="invalid-feedback">
                 يرجى إدخال اسم أول صحيح.
               </div>
@@ -88,7 +79,7 @@
 
             <div class="col-sm-6">
               <label for="lastName" class="form-label">اسم العائلة</label>
-              <input type="text" class="form-control" id="lastName" placeholder="" value="" required="">
+              <input type="text" class="form-control" name="lastName" id="lastName" placeholder="" value="" required="">
               <div class="invalid-feedback">
                 يرجى إدخال اسم عائلة صحيح.
               </div>
@@ -98,7 +89,7 @@
 
             <div class="col-12">
               <label for="email" class="form-label">البريد الإلكتروني</label>
-              <input type="email" class="form-control" id="email" placeholder="you@example.com">
+              <input type="email" class="form-control" name="email" id="email" placeholder="you@example.com">
               <div class="invalid-feedback">
                 يرجى إدخال عنوان بريد إلكتروني صحيح لتصلكم تحديثات الشحن.
               </div>
@@ -139,6 +130,8 @@
         
 
         </form>
+            
+  
       </div>
     </div>
   
@@ -150,5 +143,9 @@
 </div>
 <%}%>
 </main>
+
+
+
+
 
 <%- include('partials/footer') %>

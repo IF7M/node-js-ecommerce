@@ -70,3 +70,27 @@ img.spi {
 .clear-cart{
     font-size: small;
 }
+
+.paypal-btn{
+    width: 100%;
+    -webkit-filter: brightness(100%);
+    border: 0;
+}
+
+.paypal-btn:hover{
+    -webkit-filter: brightness(70%);
+    -webkit-transition: all 1s ease;
+    -moz-transition: all 1s ease;
+    -o-transition: all 1s ease;
+    -ms-transition: all 1s ease;
+    transition: all 1s ease;
+}
+
+.paypal-btn-no-padding{
+    border: none;
+    appearance: none;
+    cursor: pointer;
+    background-color: inherit;
+    margin: 0;
+    padding: 0;
+}

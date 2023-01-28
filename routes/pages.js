@@ -43,8 +43,12 @@ router.get('/products', (req, res) => {
 
 // favicon fix 
 router.get('/favicon.ico', (req,res)=>{
-    return ''
-   })
+    res.send('F7M') 
+   });
+
+router.get('/cart',(req,res)=>{
+    res.redirect('/cart/checkout')
+});
 
 
 // all pages
@@ -56,13 +60,18 @@ router.get('/:slug', (req, res) => {
         
         if (err) {
             console.log(err);
-            res.render('pages/404');
+            res.redirect('/')
 
         } else {
-            res.render('pages/index-page', {
+            if(!page){
+                res.render('pages/404');
+            }else{
+                 res.render('pages/index-page', {
                 page:page
 
             });
+            }
+           
         }
 
     })
@@ -78,7 +87,9 @@ router.get('/login', (req, res) => {
 
 
     res.render('pages/login')
-})
+});
+
+
 
 
 //Exports

@@ -1,8 +1,37 @@
 <%- include('partials/header') %>
 
 <main>
+<div class="container">
+    <h1>تم استلام طلبك</h1>
+    <p>رقم الطلب: <%=orderN%> <br>
+    بمبلغ اجمالي: <%=Math.round(total*3.75).toFixed(2)%>
+    </p>
+    <h4> تفاصيل الطلب: </h4>
+    <table class="table table-striped">
+        <thead>
+        <tr class="home">
+            
+            <th>المنتج</th>
+            <th>السعر</th>
+            <th>الكمية</th>
 
-    
+        </tr>
+        </thead>
+        <tbody>
+           <% cart.forEach((product)=>{ %>
+               <tr>
+                
+                <td><%= product.name %></td>
+                <td><%= Math.round(product.price*3.75).toFixed(2) %></td>
+                <td><%= product.quantity %></td>
+                
+               </tr>
+           <% }) %>
+        </tbody>
+    </table>
+
+    <img class="mt-5" src="/public/imgs/thank-you.png" alt="thank-you">
+</div>
 </main>
 
 

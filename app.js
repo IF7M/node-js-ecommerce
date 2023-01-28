@@ -23,7 +23,7 @@ app.set('view engine', 'ejs'); // ejs
 
 
 // app use
-
+app.use(express.json());
 
 /// static files
 /// static files
