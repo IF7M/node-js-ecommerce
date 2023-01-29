@@ -1,0 +1,90 @@
+<%- include('./partials/adminheader') %>
+<main>
+<div class="container mt-2">
+<h2 class="page-title">عرض الطلب</h2>
+<a href="/admin/orders" class="btn btn-primary mt-2">الرجوع الى الطلبات</a>
+</div>
+
+<form id="view-order" action="/admin/orders/view-order/<%= id %>" method="post">
+
+<div class="container mt-2">
+    <table class="table table-striped">
+        <thead>
+        <tr class="home">
+            
+            <th>رقم الطلب</th>
+            <th>رقم العميل</th>
+            <th>الحالة</th>
+            
+            <th>التاريخ</th>
+            <th>مرجع الدفع</th>
+        </tr>
+        </thead>
+        <tbody>
+           
+               <tr>
+                
+                <td><%= orderN %></td>
+                <td><%= cid %></td>
+            
+                <td>
+                    <select class="form-select"  name="status">
+                       
+                            <option value="<%= status %>"><%= status %></option>
+                            <option value="New">New</option>
+                            <option value="In Process">In Process</option>
+                            <option value="Shipped">Shipped</option>
+                            <option value="Completed">Completed</option>
+                        
+                    </select>
+                </td>
+                <td><%= date %></td>
+                <td><%= paymentid %></td>
+               </tr>
+           
+        </tbody>
+    </table>
+
+    <div class="container mt-2">
+    <h4> تفاصيل الطلب: </h4>
+    <h5> الاجمالي: <%= total %>  </h5>
+    <table class="table table-striped">
+        <thead>
+        <tr class="home">
+            
+            <th>المنتج</th>
+            <th>السعر</th>
+            <th>الكمية</th>
+
+        </tr>
+        </thead>
+        <tbody>
+            
+           <% cart.forEach((product)=>{ %>
+               <tr>
+                
+                <td><%= product.name %></td>
+                <td><%= Math.round(product.price*3.75).toFixed(2) %></td>
+                <td><%= product.quantity %></td>
+                
+               </tr>
+           <% }) %>
+        </tbody>
+    </table>
+</div>
+
+
+ 
+
+ </form>
+
+ <div class="container mt-2">
+ <button class="btn btn-primary" type="submit" form="view-order">تحديث</button>
+</div>
+
+
+</main>
+
+
+
+<%- include('./partials/adminfooter') %>

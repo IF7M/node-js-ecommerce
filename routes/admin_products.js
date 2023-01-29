@@ -37,12 +37,12 @@ const storage = multer.diskStorage({
 
 
   //upload api test
-  router.post('/upload',upload, (req, res)=>{
+//   router.post('/upload',upload, (req, res)=>{
 
-    console.log( req.files[0].filename)
-    res.send('uploaded');
+//     console.log( req.files[0].filename)
+//     res.send('uploaded');
 
-  })
+//   });
 
 router.get('/', (req,res)=>{
 

@@ -1,0 +1,44 @@
+<%- include('./partials/adminheader') %>
+<main>
+<div class="container mt-2">
+    <h2 class="page-title">الطلبات</h2>
+    
+    </div>
+    
+        <div class="container mt-2">
+            <% if(orders.length >  0){ %>
+    <table class="table table-striped">
+        <thead>
+        <tr class="home">
+            
+            <th>رقم الطلب</th>
+            <th>الاجمالي</th>
+            <th>الحالة</th>
+            
+            <th>عرض</th>
+            <th>حذف</th>
+        </tr>
+        </thead>
+        <tbody>
+           <% orders.forEach((order)=>{ %>
+               <tr>
+                
+                <td><%= order.orderN %></td>
+                <td><%= parseFloat(order.total).toFixed(2) %></td>
+            
+                <td><%= order.status %></td>
+                <td><a href="/admin/orders/view-order/<%= order._id %>">عرض</a></td>
+                <td><a class="confirmDeletion" href="/admin/orders/delete-order/<%= order._id %>">حذف</a></td>
+               </tr>
+           <% }) %>
+        </tbody>
+    </table>
+    <% } else{ %>
+        <h3 class="text-center">لايوجد طلبات!</h3>
+     <% } %>
+</div>
+   
+</main>  
+
+
+<%- include('./partials/adminfooter') %>
